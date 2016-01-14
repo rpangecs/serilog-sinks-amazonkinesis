@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Debugging;
 using Serilog.Sinks.Amazon.Kinesis;
 using Serilog.Sinks.Amazon.Kinesis.Stream;
+using Serilog.Sinks.Amazon.Kinesis.Stream.Sinks;
 
 namespace AmazonKinesisSample
 {
@@ -43,7 +44,6 @@ namespace AmazonKinesisSample
                     streamName: streamName,
                     shardCount: shardCount,
                     period: TimeSpan.FromSeconds(2),
-                    bufferLogShippingInterval: TimeSpan.FromSeconds(5),
                     bufferBaseFilename: "./logs/kinesis-buffer",
                     onLogSendError: OnLogSendError
                 );

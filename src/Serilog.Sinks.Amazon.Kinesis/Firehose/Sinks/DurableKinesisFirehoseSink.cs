@@ -13,20 +13,21 @@
 // limitations under the License.
 
 using System;
+using Amazon.KinesisFirehose;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Sinks.RollingFile;
 
-namespace Serilog.Sinks.Amazon.Kinesis.Firehose
+namespace Serilog.Sinks.Amazon.Kinesis.Firehose.Sinks
 {
     class DurableKinesisFirehoseSink : ILogEventSink, IDisposable
     {
         readonly HttpLogShipper _shipper;
         readonly RollingFileSink _sink;
 
-        public DurableKinesisFirehoseSink(KinesisFirehoseSinkOptions options)
+        public DurableKinesisFirehoseSink(KinesisFirehoseSinkOptions options, IAmazonKinesisFirehose kinesisFirehoseClient)
         {
-            var state = KinesisFirehoseSinkState.Create(options);
+            var state = new KinesisSinkState(options, kinesisFirehoseClient);
 
             if (string.IsNullOrWhiteSpace(options.BufferBaseFilename))
             {

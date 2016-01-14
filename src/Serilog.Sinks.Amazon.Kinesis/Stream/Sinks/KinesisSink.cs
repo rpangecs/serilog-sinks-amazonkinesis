@@ -16,11 +16,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Amazon.Kinesis;
 using Amazon.Kinesis.Model;
 using Serilog.Events;
 using Serilog.Sinks.PeriodicBatching;
 
-namespace Serilog.Sinks.Amazon.Kinesis.Stream
+namespace Serilog.Sinks.Amazon.Kinesis.Stream.Sinks
 {
     /// <summary>
     /// Writes log events as documents to a Amazon Kinesis.
@@ -34,10 +35,11 @@ namespace Serilog.Sinks.Amazon.Kinesis.Stream
         /// Construct a sink posting to the specified database.
         /// </summary>
         /// <param name="options">Options for configuring how the sink behaves, may NOT be null.</param>
-        public KinesisSink(KinesisSinkOptions options) : 
+        /// <param name="kinesisClient"></param>
+        public KinesisSink(KinesisStreamSinkOptions options,IAmazonKinesis kinesisClient) : 
             base(options.BatchPostingLimit, options.Period)
         {
-            _state = KinesisSinkState.Create(options);
+            _state = new KinesisSinkState(options,kinesisClient);
 
             _minimumAcceptedLevel = _state.Options.MinimumLogEventLevel;
         }
